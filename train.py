@@ -16,6 +16,11 @@ from ray.rllib.utils.framework import try_import_tf, try_import_torch
 from utils.loader import load_envs, load_models, load_algorithms
 from callbacks import CustomCallbacks
 
+#wandb LUCIA
+import wandb
+from ray import tune
+from wandb.ray import WandbLogger
+
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
 torch, _ = try_import_torch()
@@ -201,6 +206,7 @@ def run(args, parser):
 
         ### Add Custom Callbacks
         exp["config"]["callbacks"] = CustomCallbacks
+        exp["loggers"] = [WandbLogger]
 
     if args.ray_num_nodes:
         cluster = Cluster()
