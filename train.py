@@ -16,15 +16,12 @@ from ray.rllib.utils.framework import try_import_tf, try_import_torch
 from utils.loader import load_envs, load_models, load_algorithms
 from callbacks import CustomCallbacks
 
-#wandb LUCIA
-import wandb
-from ray import tune
-from wandb.ray import WandbLogger
+from wandb.ray import WandbLogger #wandb LUCIA
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
 torch, _ = try_import_torch()
-
+torch.cuda.empty_cache()  #LUCIA # to clean the GPU's cache memory.
 """
 Note : This script has been adapted from :
     https://github.com/ray-project/ray/blob/master/rllib/train.py

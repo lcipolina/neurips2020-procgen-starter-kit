@@ -2,7 +2,7 @@ from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.models import ModelCatalog
 from ray.rllib.utils.annotations import override
 from ray.rllib.utils import try_import_torch
-
+import torchvision as tv  #LUCIA
 torch, nn = try_import_torch()
 
 
@@ -58,7 +58,8 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         nn.Module.__init__(self)
 
         h, w, c = obs_space.shape
-        shape = (c, h, w)
+        shape = (c, h, w)  #LUCIA
+        #shape = (1, h, w) #LUCIA - to convert to gray channel c = R,G,B channels (the 3 of them)
 
         conv_seqs = []
         for out_channels in [16, 32, 32]:
@@ -91,4 +92,5 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         assert self._value is not None, "must call forward() first"
         return self._value
 
+#Register the model
 ModelCatalog.register_custom_model("impala_cnn_torch", ImpalaCNN)
