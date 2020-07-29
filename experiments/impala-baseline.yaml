@@ -24,17 +24,16 @@ procgen-ppo:
     checkpoint_freq: 100
     checkpoint_at_end: True
     keep_checkpoints_num: 5
-
     config:
         ################################################
         ################################################
         # === Settings for the Procgen Environment ===
         ################################################
         ################################################
-        monitor: true #wandb LUCIA
+        monitor: true #wandb LUCIA  # === Settings for the Wandb Logger ===
         env_config:
             wandb:
-                  project: 'Lucia-coinrun' #wandb LUCIA
+                  project: 'Lucia-runs' #wandb LUCIA
                   monitor_gym: true #wand LUCIA
             # Name of the procgen environment to train on # Note, that this parameter will be overriden during the evaluation by the AIcrowd evaluators.
             env_name: coinrun
@@ -129,7 +128,7 @@ procgen-ppo:
         # Use PyTorch (instead of tf). If using `rllib train`, this can also be
         # enabled with the `--torch` flag.
         # NOTE: Some agents may not support `torch` yet and throw an error.
-        use_pytorch: False #True #False #LUCIA
+        use_pytorch: True #False #LUCIA
 
         ################################################
         ################################################
@@ -191,7 +190,7 @@ procgen-ppo:
             # Examples of implementing the model in Keras is also available
             # here :
             # https://github.com/ray-project/ray/blob/master/rllib/examples/custom_keras_model.py
-            custom_model: impala_cnn_tf #impala_cnn_torch  #LUCIA
+            custom_model: impala_cnn_torch #  impala_cnn_tf # #LUCIA
             # Extra options to pass to custom class
             custom_options: {}
 
@@ -202,7 +201,7 @@ procgen-ppo:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers:  6 LUCIA  -> change to 3 if complains about memory
+        num_workers:  6 #LUCIA  -> change to 3 if complains about memory
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference

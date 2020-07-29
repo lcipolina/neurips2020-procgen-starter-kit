@@ -72,7 +72,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         self.value_fc = nn.Linear(in_features=256, out_features=1)
         
     @override(TorchModelV2)
-    def forward(self, input_dict, state, seq_lens):
+    def forward(self, input_dict, state, seq_lens):   #https://readthedocs.org/projects/ray/downloads/pdf/latest/ page 288
         x = input_dict["obs"].float()
         x = x / 255.0  # scale to 0-1
         x = x.permute(0, 3, 1, 2)  # NHWC => NCHW
@@ -88,7 +88,7 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         return logits, state
 
     @override(TorchModelV2)
-    def value_function(self):
+    def value_function(self):  #Returns the value function output for the most recent forward pass
         assert self._value is not None, "must call forward() first"
         return self._value
 
