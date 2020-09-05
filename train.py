@@ -16,7 +16,7 @@ from ray.rllib.utils.framework import try_import_tf, try_import_torch
 from utils.loader import load_envs, load_models, load_algorithms, load_preprocessors
 from callbacks import CustomCallbacks
 
-from wandb.ray import WandbLogger #wandb LUCIA
+#from wandb.ray import WandbLogger #wandb LUCIA
 
 # Try to import both backends for flag checking/warnings.
 tf = try_import_tf()
@@ -206,7 +206,7 @@ def run(args, parser):
 
         ### Add Custom Callbacks
         exp["config"]["callbacks"] = CustomCallbacks
-        exp["loggers"] = [WandbLogger]
+        #exp["loggers"] = [WandbLogger]
 
     if args.ray_num_nodes:
         cluster = Cluster()
@@ -218,6 +218,8 @@ def run(args, parser):
                 memory=args.ray_memory,
                 redis_max_memory=args.ray_redis_max_memory)
         ray.init(address=cluster.address)
+        #ray.init(local_mode=True) #LUCIA
+
     else:
         ray.init(
             address=args.ray_address,
@@ -225,7 +227,9 @@ def run(args, parser):
             memory=args.ray_memory,
             redis_max_memory=args.ray_redis_max_memory,
             num_cpus=args.ray_num_cpus,
-            num_gpus=args.ray_num_gpus)
+            num_gpus=args.ray_num_gpus,
+            #local_mode=True
+            ) #UCIA
     run_experiments(
         experiments,
         scheduler=_make_scheduler(args),

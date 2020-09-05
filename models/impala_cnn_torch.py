@@ -2,7 +2,7 @@ from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.models import ModelCatalog
 from ray.rllib.utils.annotations import override
 from ray.rllib.utils import try_import_torch
-import torchvision as tv  #LUCIA
+import torchvision.transforms as transforms #LUCIA
 torch, nn = try_import_torch()
 
 
@@ -58,9 +58,8 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         nn.Module.__init__(self)
 
         h, w, c = obs_space.shape
-        shape = (c, h, w)  #LUCIA
-        #shape = (1, h, w) #LUCIA - to convert to gray channel c = R,G,B channels (the 3 of them)
-
+        #c = 1 #UCIA - - to convert to gray channel c = R,G,B channels (the 3 of them)
+        shape = (c, h, w)
         conv_seqs = []
         for out_channels in [16, 32, 32]:
             conv_seq = ConvSequence(shape, out_channels)
@@ -73,9 +72,14 @@ class ImpalaCNN(TorchModelV2, nn.Module):
         
     @override(TorchModelV2)
     def forward(self, input_dict, state, seq_lens):   #https://readthedocs.org/projects/ray/downloads/pdf/latest/ page 288
-        x = input_dict["obs"].float()
-        x = x / 255.0  # scale to 0-1
+        x = input_dict["obs"].float() #these are the images
+        x = x / 255.0  # scale each pixel to 0-1
+        #print(x.shape) #UCIA -To debug
+        # x = torch.mean(x, dim=3)  # LUCIA quickest way to to convert to GRAY test
+        # x = x.unsqueeze(-1) #LUCIA
+        #print(x.shape)
         x = x.permute(0, 3, 1, 2)  # NHWC => NCHW
+
         for conv_seq in self.conv_seqs:
             x = conv_seq(x)
         x = torch.flatten(x, start_dim=1)

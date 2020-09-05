@@ -32,11 +32,28 @@ procgen-ppo:
         ################################################
         monitor: true #wandb LUCIA  # === Settings for the Wandb Logger ===
         env_config:
-            wandb:
-                  project: 'Lucia-runs' #wandb LUCIA
-                  monitor_gym: true #wand LUCIA
+            #render_mode: "rgb_array"   #UCIA - to render the trained game
+           # wandb:
+           #       project: 'Lucia-runs' #wandb LUCIA
+           #       monitor_gym: true #wand LUCIA
             # Name of the procgen environment to train on # Note, that this parameter will be overriden during the evaluation by the AIcrowd evaluators.
-            env_name: coinrun
+            env_name: #coinrun   #  LUCIA
+                grid_search:
+                    - coinrun
+                    - starpilot
+                    - caveflyer
+                    - dodgeball
+                    - chaser
+                    - miner
+                    - jumper
+                    - leaper
+                    - maze
+                    - bigfish
+                    - heist
+                    - climber
+                    - plunder
+                    - ninja
+                    - bossfight
             # The number of unique levels that can be generated. Set to 0 to use unlimited levels
             num_levels: 0
             # The lowest seed that will be used to generated levels. 'start_level' and 'num_levels' fully specify the set of possible levels
@@ -160,16 +177,16 @@ procgen-ppo:
 
             # == LSTM ==
             # Whether to wrap the model with a LSTM
-            # use_lstm: false
+            use_lstm: true #false #LUCIA
             # Max seq len for training the LSTM, defaults to 20
-            # max_seq_len: 20
+            max_seq_len: 20  #uncommented by LUCIA
             # Size of the LSTM cell
-            # lstm_cell_size: 256
+            lstm_cell_size: 256 #uncommented by LUCIA
             # Whether to feed a_{t-1}, r_{t-1} to LSTM
-            # lstm_use_prev_action_reward: false
+            lstm_use_prev_action_reward: false #uncommented by LUCIA
             # When using modelv1 models with a modelv2 algorithm, you may have to
             # define the state shape here (e.g., [256, 256]).
-            # state_shape: null
+            state_shape:  [256, 256] # null  #UCIA
 
             # === Options for custom models ===
             # Name of a custom model to use
@@ -201,7 +218,7 @@ procgen-ppo:
         ################################################
         # Number of rollout worker actors to create for parallel sampling. Setting
         # this to 0 will force rollouts to be done in the trainer actor.
-        num_workers:  6 #LUCIA  -> change to 3 if complains about memory
+        num_workers: 6 #TO DEBUG 3 # 6 #LUCIA  -> change to 3 if complains about memory
 
         # Number of environments to evaluate vectorwise per worker. This enables
         # model inference batching, which can improve performance for inference
